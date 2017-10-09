@@ -1,1 +1,67 @@
-!function o(n,t,r){function e(i,l){if(!t[i]){if(!n[i]){var a="function"==typeof require&&require;if(!l&&a)return a(i,!0);if(u)return u(i,!0);var s=new Error("Cannot find module '"+i+"'");throw s.code="MODULE_NOT_FOUND",s}var f=t[i]={exports:{}};n[i][0].call(f.exports,function(o){var t=n[i][1][o];return e(t||o)},f,f.exports,o,n,t,r)}return t[i].exports}for(var u="function"==typeof require&&require,i=0;i<r.length;i++)e(r[i]);return e}({1:[function(o,n,t){function r(o,n){this.title=o,this.body=n,this.vowelCount=0,this.consonantCount=0}r.prototype.returnWords=function(){return body.split(" ").length},r.prototype.countVowels=function(){var o=body.toLowerCase();o=(o=o.split(" ")).join(""),original=o.length;for(var n=0,t=0;t<o.length;++t)for(var r=0;r<"aeiou".length;++r)o.charAt(t)==="aeiou".charAt(r)&&(n+=1);return vowelCount=n,consonantCount=original-n,n},r.prototype.getTeaser=function(){var o=body,n=(o=o.split("."))[0].split(" ");return n.length>8?n.slice(0,8).join(" ")+". . .":o[0]},t.journalModule=Journal},{}],2:[function(o,n,t){o("./../js/journal.js").journalModule;$(document).ready(function(){$("#journal-form").submit(function(o){o.preventDefault();var n=$("#title").val(),t=$("#body").val(),r=new JournalEntry(n,t),e=r.returnWords();r.countVowels();var u=r.vowelCount,i=r.consonantCount,l=r.getTeaser();$("#output").append("<h2>"+n+"</h2><h3>"+l+"</h3><p>"+t+"</p><li> Word Count: "+e+"</li><li> Vowel Count: "+u+"</li><li> Consonant Count: "+i+"</li>")})})},{"./../js/journal.js":1}]},{},[2]);
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+
+function JournalEntry(title, body) {
+  this.title = title;
+  this.body = body;
+  this.vowelCount = 0;
+  this.consonantCount = 0;
+}
+
+JournalEntry.prototype.returnWords = function() {
+  return this.body.split(' ').length;
+};
+
+JournalEntry.prototype.countVowels = function () {
+  var text = this.body.toLowerCase();
+  text = text.split(" ");
+  text = text.join('');
+  original = text.length;
+  var vowels = "aeiou";
+  var count = 0;
+  for (var i = 0; i < text.length; ++i){
+    for (var j = 0; j < vowels.length; ++j){
+      if (text.charAt(i) === vowels.charAt(j)){
+        count +=1;
+      }
+    }
+  }
+  this.vowelCount = count;
+  this.consonantCount = (original - count);
+  return count;
+};
+
+JournalEntry.prototype.getTeaser = function () {
+  var text = this.body;
+  text = text.split('.');
+  var sentence = text[0].split(' ');
+  var sentenceLength = sentence.length;
+
+  if (sentenceLength > 8) {
+    return sentence.slice(0, 8).join(" ") + ". . .";
+  } else {
+    return text[0];
+  }
+};
+
+
+exports.journalModule = JournalEntry;
+
+},{}],2:[function(require,module,exports){
+var JournalEntry = require('./../js/journal.js').journalModule;
+
+$(document).ready(function() {
+  $('#journal-form').submit(function(event) {
+    event.preventDefault();
+    var title = $('#title').val();
+    var body = $('#body').val();
+    var newEntry = new JournalEntry(title,body);
+    var wordCount = newEntry.returnWords();
+    newEntry.countVowels();
+    var vowels = newEntry.vowelCount;
+    var consonants = newEntry.consonantCount;
+    var teaser = newEntry.getTeaser();
+    $('#output').append("<h2>" + title + "</h2>" + "<h3>"+ teaser + "</h3>" +"<p>"+ body+"</p>"+"<li> Word Count: " + wordCount + "</li>"+"<li> Vowel Count: " + vowels + "</li>"+"<li> Consonant Count: " + consonants + "</li>");
+  });
+});
+
+},{"./../js/journal.js":1}]},{},[2]);

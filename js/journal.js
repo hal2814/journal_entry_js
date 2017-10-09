@@ -43,4 +43,4 @@ JournalEntry.prototype.getTeaser = function () {
 };
 
 
-exports.journalModule = Journal;
+exports.journalModule = JournalEntry;

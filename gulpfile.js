@@ -8,11 +8,17 @@ var utilities = require('gulp-util')
 var del = require('del')
 var buildProduction = utilities.env.production;
 
-gulp.task('jsBrowserify', function() {
-  return browserify({ entries: ['./js/journal-interface.js'] })
-    .bundle()
-    .pipe(source('app.js'))
-    .pipe(gulp.dest('./build/js'));
+// gulp.task('jsBrowserify', function() {
+//   return browserify({ entries: ['./js/journal-interface.js'] })
+//     .bundle()
+//     .pipe(source('app.js'))
+//     .pipe(gulp.dest('./build/js'));
+// });
+gulp.task('jsBrowserify', ['concatInterface'], function() {
+  return browserify({ entries: ['./tmp/allConcat.js'] })
+  .bundle()
+  .pipe(source('app.js'))
+  .pipe(gulp.dest('./build/js'));
 });
 
 gulp.task("minifyScripts", ["jsBrowserify"], function(){
@@ -32,17 +38,11 @@ gulp.task('jshint', function(){
 });
 
 gulp.task('concatInterface', function() {
-  return gulp.src(['./js/journal-interface.js'])
+  return gulp.src(['./js/journal-interface.js', '.js/journal.js'])
     .pipe(concat('allConcat.js'))
     .pipe(gulp.dest('./tmp'));
 });
 
-gulp.task('jsBrowserify', ['concatInterface'], function() {
-  return browserify({ entries: ['./tmp/allConcat.js'] })
-    .bundle()
-    .pipe(source('app.js'))
-    .pipe(gulp.dest('./build/js'));
-});
 
 gulp.task("build", function(){
   if (buildProduction) {
