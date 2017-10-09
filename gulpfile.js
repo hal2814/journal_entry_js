@@ -7,18 +7,43 @@ var uglify = require('gulp-uglify')
 var utilities = require('gulp-util')
 var del = require('del')
 var buildProduction = utilities.env.production;
+var lib = require('bower-files')({
+  "overrides":{
+    "bootstrap" : {
+      "main": [
+        "less/bootstrap.less",
+        "dist/css/bootstrap.css",
+        "dist/js/bootstrap.js"
+      ]
+    }
+  }
+});
+var browserSync = require('browser-sync').create();
 
-// gulp.task('jsBrowserify', function() {
-//   return browserify({ entries: ['./js/journal-interface.js'] })
-//     .bundle()
-//     .pipe(source('app.js'))
-//     .pipe(gulp.dest('./build/js'));
-// });
+gulp.task('bower', ['bowerJS', 'bowerCSS']);
+
+gulp.task('jsBuild', ['jsBrowserify', 'jshint'], function(){
+  browserSync.reload();
+});
+
 gulp.task('jsBrowserify', ['concatInterface'], function() {
   return browserify({ entries: ['./tmp/allConcat.js'] })
   .bundle()
   .pipe(source('app.js'))
   .pipe(gulp.dest('./build/js'));
+});
+
+gulp.task('bowerJS', function () {
+  return gulp.src(lib.ext('js').files)
+    .pipe(concat('vendor.min.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest('./build/js'));
+});
+
+gulp.task('bowerCSS', function () {
+  return gulp.src(lib.ext('css').files)
+    .pipe(concat('vendor.css'))
+    .pipe(gulp.dest('./build/css'));
 });
 
 gulp.task("minifyScripts", ["jsBrowserify"], function(){
@@ -38,16 +63,41 @@ gulp.task('jshint', function(){
 });
 
 gulp.task('concatInterface', function() {
-  return gulp.src(['./js/journal-interface.js', '.js/journal.js'])
+  return gulp.src(['./js/journal-interface.js', './js/time-interface.js', '.js/journal.js'])
     .pipe(concat('allConcat.js'))
     .pipe(gulp.dest('./tmp'));
 });
 
+gulp.task('serve', function() {
+  browserSync.init({
+    server: {
+      baseDir: "./",
+      index: "index.html"
+    }
+  });
 
-gulp.task("build", function(){
+  gulp.watch(['js/*.js'], ['jsBuild']);
+  gulp.watch(['bower.json'], ['bowerBuild']);
+
+});
+
+gulp.task('bowerBuild', ['bower'], function(){
+  browserSync.reload();
+});
+
+// gulp.task("build", function(){
+//   if (buildProduction) {
+//     gulp.start('minifyScripts');
+//   } else {
+//     gulp.start('jsBrowserify');
+//   }
+// });
+
+gulp.task('build', ['clean'], function(){
   if (buildProduction) {
     gulp.start('minifyScripts');
   } else {
     gulp.start('jsBrowserify');
   }
+  gulp.start('bower');
 });

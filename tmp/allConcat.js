@@ -1,4 +1,4 @@
-var Journal = require('./../js/journal.js').journalModule;
+var JournalEntry = require('./../js/journal.js').journalModule;
 
 $(document).ready(function() {
   $('#journal-form').submit(function(event) {
@@ -13,4 +13,8 @@ $(document).ready(function() {
     var teaser = newEntry.getTeaser();
     $('#output').append("<h2>" + title + "</h2>" + "<h3>"+ teaser + "</h3>" +"<p>"+ body+"</p>"+"<li> Word Count: " + wordCount + "</li>"+"<li> Vowel Count: " + vowels + "</li>"+"<li> Consonant Count: " + consonants + "</li>");
   });
+});
+
+$(document).ready(function(){
+  $('#time').text(moment());
 });

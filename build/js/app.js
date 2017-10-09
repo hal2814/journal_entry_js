@@ -64,4 +64,8 @@ $(document).ready(function() {
   });
 });
 
+$(document).ready(function(){
+  $('#time').text(moment());
+});
+
 },{"./../js/journal.js":1}]},{},[2]);

@@ -7,11 +7,11 @@ function JournalEntry(title, body) {
 }
 
 JournalEntry.prototype.returnWords = function() {
-  return body.split(' ').length;
+  return this.body.split(' ').length;
 };
 
 JournalEntry.prototype.countVowels = function () {
-  var text = body.toLowerCase();
+  var text = this.body.toLowerCase();
   text = text.split(" ");
   text = text.join('');
   original = text.length;
@@ -24,13 +24,13 @@ JournalEntry.prototype.countVowels = function () {
       }
     }
   }
-  vowelCount = count;
-  consonantCount = (original - count);
+  this.vowelCount = count;
+  this.consonantCount = (original - count);
   return count;
 };
 
 JournalEntry.prototype.getTeaser = function () {
-  var text = body;
+  var text = this.body;
   text = text.split('.');
   var sentence = text[0].split(' ');
   var sentenceLength = sentence.length;
