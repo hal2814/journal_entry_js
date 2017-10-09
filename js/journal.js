@@ -8,7 +8,7 @@ function JournalEntry(title, body) {
 
 JournalEntry.prototype.returnWords = function() {
   return body.split(' ').length;
-}
+};
 
 JournalEntry.prototype.countVowels = function () {
   var text = body.toLowerCase();
@@ -21,9 +21,9 @@ JournalEntry.prototype.countVowels = function () {
     for (var j = 0; j < vowels.length; ++j){
       if (text.charAt(i) === vowels.charAt(j)){
         count +=1;
-      };
-    };
-  };
+      }
+    }
+  }
   vowelCount = count;
   consonantCount = (original - count);
   return count;
@@ -32,15 +32,14 @@ JournalEntry.prototype.countVowels = function () {
 JournalEntry.prototype.getTeaser = function () {
   var text = body;
   text = text.split('.');
-  var sentence = text[0].split(' ')
+  var sentence = text[0].split(' ');
   var sentenceLength = sentence.length;
-	alert(sentenceLength)
 
   if (sentenceLength > 8) {
     return sentence.slice(0, 8).join(" ") + ". . .";
   } else {
     return text[0];
-  };
+  }
 };
 
 
